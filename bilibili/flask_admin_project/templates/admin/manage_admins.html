@@ -1,0 +1,37 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}管理管理員{% endblock %}
+
+{% block content %}
+<h1 class="h2">管理管理員帳號</h1>
+<a href="{{ url_for('admin.register') }}" class="btn btn-primary mb-3">新增管理員</a>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>帳號</th>
+      <th>等級</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for admin in admins %}
+    <tr>
+      <td>{{ admin.account }}</td>
+      <td>{{ '二級管理員' if admin.level == 2 else '一級管理員' }}</td>
+      <td>
+        {% if admin.level == 1 %}
+        <form action="{{ url_for('admin.delete_admin', account=admin.account) }}" method="POST" style="display:inline;">
+          <button class="btn btn-sm btn-danger" onclick="return confirm('確定要刪除此管理員嗎？')">刪除</button>
+        </form>
+        {% endif %}
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3" class="text-center">尚無資料</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %} 

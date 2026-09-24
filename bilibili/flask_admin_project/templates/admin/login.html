@@ -1,0 +1,27 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}管理員登入{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-4" style="margin-top: 5vh;">
+    <h2 class="text-center mb-4">管理員登入</h2>
+    <div class="card">
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.login') }}">
+          <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
+          <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="account" name="account" placeholder="Account" required>
+            <label for="account">帳號</label>
+          </div>
+          <div class="form-floating mb-3">
+            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+            <label for="password">密碼</label>
+          </div>
+          <button class="w-100 btn btn-lg btn-primary" type="submit">登入</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

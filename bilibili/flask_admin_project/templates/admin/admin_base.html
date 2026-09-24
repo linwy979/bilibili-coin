@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}幣哩幣哩 - 管理後台{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <style>
+        body { padding-top: 4.5rem; }
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100; 
+            padding: 48px 0 0; 
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+        @media (max-width: 767.98px) {
+            .sidebar {
+                top: 56px; 
+                padding-top: 0;
+            }
+        }
+        .sidebar-sticky {
+            position: relative;
+            top: 0;
+            height: calc(100vh - 48px); 
+            padding-top: .5rem;
+            overflow-x: hidden;
+            overflow-y: auto; 
+        }
+        .nav-link [data-feather] {
+            margin-right: 4px;
+            color: #999;
+            vertical-align: text-bottom;
+        }
+        .nav-link.active [data-feather] {
+            color: inherit;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('admin.dashboard') if session.admin_user_id else url_for('admin.login') }}">幣哩幣哩 管理後台</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <ul class="navbar-nav ms-auto mb-2 mb-md-0">
+                    {% if session.admin_user_id %}
+                        <li class="nav-item">
+                            <span class="navbar-text me-3">你好, {{ session.admin_account }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.logout') }}">登出</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.login') }}">登入</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('admin.register') }}">註冊管理員</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            {% if session.admin_user_id %}
+            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                <div class="position-sticky pt-3 sidebar-sticky">
+                    <ul class="nav flex-column">
+                        <li class="nav-item">
+                            <a class="nav-link {% if request.endpoint == 'admin.dashboard' %}active{% endif %}" aria-current="page" href="{{ url_for('admin.dashboard') }}">
+                                <i data-feather="home"></i>
+                                主控台
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'crypto' in request.endpoint %}active{% endif %}" href="{{ url_for('admin.manage_cryptos') }}">
+                                <i data-feather="dollar-sign"></i>
+                                管理幣種
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'user' in request.endpoint and 'view_user_details' not in request.endpoint %}active{% endif %}" href="{{ url_for('admin.manage_users') }}">
+                                <i data-feather="users"></i>
+                                管理使用者
+                            </a>
+                        </li>
+                        {% if session.admin_level == 2 %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if 'manage_admins' in request.endpoint %}active{% endif %}" href="{{ url_for('admin.manage_admins') }}">
+                                <i data-feather="shield"></i>
+                                管理管理員
+                            </a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </nav>
+            {% endif %}
+
+            <main class="{% if session.admin_user_id %}col-md-9 ms-sm-auto col-lg-10{% else %}col-12{% endif %} px-md-4">
+                <div class="pt-3"> {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+                    {% block content %}{% endblock %}
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      feather.replace() 
+    </script>
+</body>
+</html>

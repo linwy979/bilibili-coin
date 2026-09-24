@@ -1,0 +1,20 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}編輯幣種{% endblock %}
+
+{% block content %}
+<h1 class="h2">編輯幣種：{{ crypto.coin_name }} ({{ crypto.coin_id }})</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label for="symbol">幣種符號</label>
+    <input type="text" class="form-control" id="symbol" name="symbol" value="{{ crypto.coin_id }}" required>
+  </div>
+  <div class="mb-3">
+    <label for="name">CoinGecko ID</label>
+    <input type="text" class="form-control" id="name" name="name" value="{{ crypto.coin_name }}" required>
+    <div class="form-text">需與 CoinGecko API 的幣種 ID 相同，例如 bitcoin、ethereum。</div>
+  </div>
+  <button type="submit" class="btn btn-primary">儲存</button>
+  <a href="{{ url_for('admin.manage_cryptos') }}" class="btn btn-secondary">取消</a>
+</form>
+{% endblock %}

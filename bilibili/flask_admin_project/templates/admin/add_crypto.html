@@ -1,0 +1,20 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}新增幣種{% endblock %}
+
+{% block content %}
+<h1 class="h2">新增幣種</h1>
+<form method="POST">
+  <div class="mb-3">
+    <label for="symbol">幣種符號</label>
+    <input type="text" class="form-control" id="symbol" name="symbol" placeholder="例如 ADA" maxlength="10" required>
+  </div>
+  <div class="mb-3">
+    <label for="name">CoinGecko ID</label>
+    <input type="text" class="form-control" id="name" name="name" placeholder="例如 cardano" required>
+    <div class="form-text">需與 CoinGecko API 的幣種 ID 相同，新增後幣價排程會自動開始抓取價格。</div>
+  </div>
+  <button type="submit" class="btn btn-primary">新增</button>
+  <a href="{{ url_for('admin.manage_cryptos') }}" class="btn btn-secondary">返回</a>
+</form>
+{% endblock %}

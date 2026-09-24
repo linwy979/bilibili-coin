@@ -1,0 +1,82 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}使用者詳情 - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">使用者詳情: <small class="text-muted">{{ user.user_id }}</small></h1>
+    <a href="{{ url_for('admin.manage_users') }}" class="btn btn-sm btn-outline-secondary">
+        <i data-feather="arrow-left"></i> 返回使用者列表
+    </a>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <i data-feather="user"></i> 基本資料
+    </div>
+    <div class="card-body">
+        <p><strong>LINE User ID:</strong> {{ user.user_id }}</p>
+        <p class="mb-0"><strong>現金餘額:</strong> {{ "{:,.2f}".format(user.balance or 0) }} USD</p>
+    </div>
+</div>
+
+
+<div class="card mb-4">
+    <div class="card-header">
+       <i data-feather="list"></i> 追蹤清單
+    </div>
+    <div class="card-body">
+        {% if tracking_list %}
+            <ul class="list-group">
+            {% for item in tracking_list %}
+                <li class="list-group-item">{{ item.crypto_name.capitalize() }} ({{ item.coin_id }})</li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p class="fst-italic">此使用者沒有追蹤任何幣種。</p>
+        {% endif %}
+    </div>
+</div>
+
+
+<div class="card">
+    <div class="card-header">
+        <i data-feather="trending-up"></i> 交易紀錄
+    </div>
+    <div class="card-body">
+        {% if investments %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead>
+                        <tr>
+                            <th>幣種</th>
+                            <th>買 / 賣</th>
+                            <th class="text-end">數量</th>
+                            <th class="text-end">成交價 (USD)</th>
+                            <th class="text-end">成交金額 (USD)</th>
+                            <th>交易時間</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for inv in investments %}
+                        <tr>
+                            <td>{{ inv.crypto_name.capitalize() }} ({{ inv.coin_id }})</td>
+                            <td>
+                                {% if inv.action == 'buy' %}<span class="badge bg-success">買入</span>
+                                {% else %}<span class="badge bg-danger">賣出</span>{% endif %}
+                            </td>
+                            <td class="text-end">{{ "%.6f"|format(inv.quantity) }}</td>
+                            <td class="text-end">{{ "{:,.6g}".format(inv.price) }}</td>
+                            <td class="text-end">{{ "{:,.2f}".format(inv.total_value) }}</td>
+                            <td>{{ inv.trade_time.strftime('%Y-%m-%d %H:%M:%S') if inv.trade_time else 'N/A' }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="fst-italic">此使用者沒有任何交易紀錄。</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}註冊管理員帳號{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 col-lg-4" style="margin-top: 5vh;">
+        <h2 class="text-center mb-4">註冊管理員帳號</h2>
+        <div class="card">
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('admin.register') }}">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" id="account" name="account" placeholder="Account" value="{{ request.form.account or '' }}" required>
+                        <label for="account">帳號 (Account)</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                        <label for="password">密碼</label>
+                    </div>
+                    <div class="form-floating mb-3">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password" required>
+                        <label for="confirm_password">確認密碼</label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="level" class="form-label">管理員等級</label>
+                        <select class="form-select" id="level" name="level" required>
+                            <option value="1">一級管理員</option>
+                            <option value="2">二級管理員</option>
+                        </select>
+                    </div>
+                    <button class="w-100 btn btn-lg btn-primary" type="submit">註冊</button>
+                </form>
+                <div class="text-center mt-3">
+                    <p>返回 <a href="{{ url_for('admin.manage_admins') }}">管理員列表</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,28 @@
+# 環境變數與密碼（請參考 *.env.example）
+*.env
+!*.env.example
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Node / 前端建置產物
+node_modules/
+bilibili/dist/
+
+# 執行時產生的檔案
+bilibili/flask_session/
+*.log
+error_log.txt
+*.db
+
+# 編輯器與系統檔
+.vscode/
+.idea/
+.claude/
+.agents/
+Thumbs.db
+.DS_Store

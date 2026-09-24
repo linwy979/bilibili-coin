@@ -1,0 +1,36 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}管理幣種{% endblock %}
+
+{% block content %}
+<h1 class="h2">管理支援幣種</h1>
+<a href="{{ url_for('admin.add_crypto') }}" class="btn btn-primary mb-3">新增幣種</a>
+
+<table class="table table-bordered table-hover">
+  <thead class="table-dark">
+    <tr>
+      <th>符號</th>
+      <th>CoinGecko ID</th>
+      <th>操作</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for crypto in cryptos %}
+    <tr>
+      <td>{{ crypto.coin_id }}</td>
+      <td>{{ crypto.coin_name }}</td>
+      <td>
+        <a href="{{ url_for('admin.edit_crypto', crypto_id=crypto.coin_id) }}" class="btn btn-sm btn-warning">編輯</a>
+        <form action="{{ url_for('admin.delete_crypto', crypto_id=crypto.coin_id) }}" method="POST" style="display:inline;">
+          <button class="btn btn-sm btn-danger" onclick="return confirm('確定要刪除嗎？')">刪除</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="3" class="text-center">尚無資料</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

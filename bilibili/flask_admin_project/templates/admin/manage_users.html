@@ -1,0 +1,42 @@
+{% extends "admin/admin_base.html" %}
+
+{% block title %}管理使用者 - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">管理應用程式使用者</h1>
+</div>
+<div class="table-responsive">
+    <table class="table table-striped table-hover table-sm">
+        <thead class="table-dark">
+            <tr>
+                <th>使用者 LINE ID</th>
+                <th class="text-end">現金餘額 (USD)</th>
+                <th class="text-center">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user_obj in users %}
+            <tr>
+                <td>{{ user_obj.user_id }}</td>
+                <td class="text-end">{{ "{:,.2f}".format(user_obj.balance or 0) }}</td>
+                <td class="text-center">
+                    <a href="{{ url_for('admin.view_user_details', line_user_id=user_obj.user_id) }}" class="btn btn-sm btn-outline-primary" title="查看詳情">
+                        <i data-feather="eye"></i> 查看
+                    </a>
+                    <form action="{{ url_for('admin.delete_user_admin', line_user_id=user_obj.user_id) }}" method="POST" style="display: inline-block;" onsubmit="return confirm('確定要刪除使用者 {{ user_obj.user_id }} 嗎？');">
+                        <button type="submit" class="btn btn-sm btn-outline-danger" title="刪除使用者">
+                            <i data-feather="user-x"></i> 刪除
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" class="text-center fst-italic">目前沒有應用程式使用者。</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
